@@ -8,7 +8,7 @@
 ## Pasos de instalación
 
 ### 1. Instalar dependencias necesarias
-Utilizar **Homebrew** (el gestor de paquetes de macOS, similar a `apt-get` en Linux):
+Utilizar Homebrew (el gestor de paquetes de macOS, similar a `apt-get` en Linux):
 
 ```bash
 brew install qemu
@@ -16,7 +16,7 @@ brew tap riscv-software-src/riscv
 brew install riscv-tools
 ```
 ### 2. Clonar el repositorio de xv6-riscv
-Con **git** clonamos el proyecto oficial:
+Con git clonamos el proyecto oficial:
 
 ```bash
 git clone https://github.com/mit-pdos/xv6-riscv.git
@@ -58,3 +58,6 @@ Comando `cat README`
 
 ![Comando README](https://img001.prntscr.com/file/img001/9-VXn31NQSWGCyMqFHqSdA.png)
 
+## Conclusión
+
+Con estos pasos logramos instalar y ejecutar xv6-riscv en un entorno emulado con QEMU, lo que nos brinda una plataforma ideal para experimentar con conceptos de sistemas operativos. Este entorno nos permite comprender mejor cómo funciona un kernel, practicar con llamadas al sistema, administración de procesos, memoria y otros elementos fundamentales, en un ambiente seguro y controlado sin dañar nuestro computador.
