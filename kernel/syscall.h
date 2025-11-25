@@ -20,3 +20,6 @@
 #define SYS_link   19
 #define SYS_mkdir  20
 #define SYS_close  21
+// Definiciones para las funciones de la Tarea 3.
+#define SYS_mrdprotect 22
+#define SYS_munrdprotect 23

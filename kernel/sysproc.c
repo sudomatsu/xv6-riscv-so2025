@@ -105,3 +105,31 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// Quitar permiso de lectura de páginas
+// Retorna 0 en éxito, -1 si hay error.
+uint64
+sys_mrdprotect(void)
+{
+  uint64 addr;
+  int len;
+
+  argaddr(0, &addr);
+  argint(1, &len);
+
+  return mrdprotect(addr, len);
+}
+
+// Restaurar permiso de lectura de páginas
+// Retorna 0 en éxito, -1 si hay error.
+uint64
+sys_munrdprotect(void)
+{
+  uint64 addr;
+  int len;
+
+  argaddr(0, &addr);
+  argint(1, &len);
+
+  return munrdprotect(addr, len);
+}

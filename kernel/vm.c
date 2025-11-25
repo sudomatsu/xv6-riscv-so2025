@@ -484,3 +484,107 @@ ismapped(pagetable_t pagetable, uint64 va)
   }
   return 0;
 }
+
+int
+mrdprotect(uint64 addr, int len)
+{
+  struct proc *p = myproc();
+  pte_t *pte;
+  uint64 va;
+
+  // Verificar que addr está alineada a página
+  if(addr % PGSIZE != 0)
+    return -1;
+
+  // Verificar que len > 0
+  if(len <= 0)
+    return -1;
+
+  // Verificar que el rango está dentro del espacio de usuario
+  if(addr >= MAXVA)
+    return -1;
+  
+  if(addr + (uint64)len * PGSIZE > p->sz)
+    return -1;
+
+  // Recorrer cada página y quitar el bit PTE_R
+  for(int i = 0; i < len; i++){
+    va = addr + i * PGSIZE;
+    
+    // Obtener el PTE para esta dirección virtual
+    pte = walk(p->pagetable, va, 0);
+    
+    // Verificar que el PTE existe
+    if(pte == 0)
+      return -1;
+    
+    // Verificar que la página está mapeada (PTE_V)
+    if((*pte & PTE_V) == 0)
+      return -1;
+    
+    // Verificar que es una página de usuario (PTE_U)
+    if((*pte & PTE_U) == 0)
+      return -1;
+    
+    // Limpiar el bit PTE_R (quitar permiso de lectura)
+    *pte &= ~PTE_R;
+  }
+
+  // Flush TLB para que los cambios tengan efecto
+  sfence_vma();
+
+  return 0;
+}
+
+// Restaura el permiso de lectura (PTE_R) de las páginas en el rango [addr, addr + len*PGSIZE).
+// Retorna 0 en éxito, -1 si hay error.
+int
+munrdprotect(uint64 addr, int len)
+{
+  struct proc *p = myproc();
+  pte_t *pte;
+  uint64 va;
+
+  // Verificar que addr está alineada a página
+  if(addr % PGSIZE != 0)
+    return -1;
+
+  // Verificar que len > 0
+  if(len <= 0)
+    return -1;
+
+  // Verificar que el rango está dentro del espacio de usuario
+  if(addr >= MAXVA)
+    return -1;
+  
+  if(addr + (uint64)len * PGSIZE > p->sz)
+    return -1;
+
+  // Recorrer cada página y activar el bit PTE_R (restaurar permiso de lectura)
+  for(int i = 0; i < len; i++){
+    va = addr + i * PGSIZE;
+    
+    // Obtener el PTE para esta dirección virtual
+    pte = walk(p->pagetable, va, 0);
+    
+    // Verificar que el PTE existe
+    if(pte == 0)
+      return -1;
+    
+    // Verificar que la página está mapeada (PTE_V)
+    if((*pte & PTE_V) == 0)
+      return -1;
+    
+    // Verificar que es una página de usuario (PTE_U)
+    if((*pte & PTE_U) == 0)
+      return -1;
+    
+    // Activar el bit PTE_R (restaurar permiso de lectura)
+    *pte |= PTE_R;
+  }
+
+  // Flush TLB para que los cambios tengan efecto
+  sfence_vma();
+
+  return 0;
+}
