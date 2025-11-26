@@ -82,6 +82,8 @@ El mensaje `usertrap` significa que el kernel atrapó al proceso intentando hace
 
 Esto confirma que **nuestra protección funciona**: la memoria se volvió inaccesible.
 
+Pero modificamos el rdprotect_test.c para poder generar un proceso hijo que pueda leer la memoria y vemos que el comportamiento es el correcto y nos da un `usertrap` al intentar modificar la memoria protegida. 
+
 ---
 
 ## Conclusión
